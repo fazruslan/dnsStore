@@ -5,19 +5,19 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class DNSFavoritesPage {
+public class DNSBasketPage extends PageFactory{
 
     WebDriver driver;
-    public DNSFavoritesPage(WebDriver driver){
+    public DNSBasketPage(WebDriver driver){
         this.driver = driver;
         PageFactory.initElements(driver, this);
     }
 
-    @FindBy(xpath = "//div[@class='name']/a")
-    private WebElement productNameInFavoriteProducts;
+    @FindBy(xpath = "//div[@class='cart-items__product-name']/a")
+    private WebElement productNameInBasketPage;
 
-    public String getProductNameInFavoriteProducts(){
-        return productNameInFavoriteProducts.getText();
+    public String getProductNameInPasketPage(){
+        return productNameInBasketPage.getText();
     }
 
 
