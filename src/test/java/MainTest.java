@@ -1,52 +1,53 @@
-import Pages.*;
+import DNS.Pages.*;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.*;
-import utils.Webdriver;
+import DNS.utils.Webdriver;
 
 import java.util.concurrent.TimeUnit;
 
 public class MainTest {
 
     WebDriver driver = Webdriver.getChromeDriver();
-    DNSMainPage dnsMainPage = new DNSMainPage(driver);
-    DNSCategoriesPage dnsCategoriesPage = new DNSCategoriesPage(driver);
-    DNSProductPage dnsProductPage = new DNSProductPage(driver);
-    DNSBasketPage dnsBasketPage = new DNSBasketPage(driver);
-    DNSFavoritesPage dnsFavoritesPage = new DNSFavoritesPage(driver);
+    MainPage mainPage = new MainPage(driver);
+    CatalogPage catalogPage = new CatalogPage(driver);
+    ProductPage productPage = new ProductPage(driver);
+    BasketPage basketPage = new BasketPage(driver);
+    FavoritesPage favoritesPage = new FavoritesPage(driver);
 
     @BeforeTest
     public void setup() {
-        driver.get(dnsMainPage.pageUrl);
+        driver.get(mainPage.pageUrl);
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
     @Test
     public void openDNSMainPage() {
-        Assert.assertTrue(dnsMainPage.getSidebar().isDisplayed());
-        Assert.assertTrue(dnsMainPage.getAdBanner().isDisplayed());
-        Assert.assertTrue(dnsMainPage.getActualOffers().isDisplayed());
-        Assert.assertTrue(dnsMainPage.getActions().isDisplayed());
-        Assert.assertTrue(dnsMainPage.getHeaderContent().isDisplayed());
+        Assert.assertTrue(mainPage.getSidebar().isDisplayed());
+        Assert.assertTrue(mainPage.getAdBanner().isDisplayed());
+        Assert.assertTrue(mainPage.getActualOffers().isDisplayed());
+        Assert.assertTrue(mainPage.getActions().isDisplayed());
+        Assert.assertTrue(mainPage.getHeaderContent().isDisplayed());
 
     }
 
     @Test
     public void addProductToBasket(){
-        dnsMainPage.chooseHouseTechnic();
-        dnsCategoriesPage.chooseTvSubcategory();
-        dnsCategoriesPage.chooseTvSubcategory();
-        dnsCategoriesPage.chooseFirstProductOnCatalog();
+        mainPage.chooseHouseTechnic();
+        catalogPage.chooseTvSubcategory();
+        catalogPage.chooseTvSubcategory();
+        catalogPage.chooseFirstProduct();
 
-        String productNameInProductPage = dnsProductPage.getProductNameInProductPage();
+        String productNameInProductPage = productPage.getProductName();
 
-        dnsProductPage.clickBuyButton();
-        dnsProductPage.goToBasketFromProductPage();
+        productPage.clickBuyButton();
+        productPage.goToBasketFromProductPage();
 
-        String productNameInBasketPage = dnsBasketPage.getProductNameInPasketPage();
+        String productNameInBasketPage = basketPage.getProductName();
 
-        Assert.assertEquals(productNameInProductPage, productNameInBasketPage);
+        Assert.assertEquals(productNameInProductPage, productNameInBasketPage,
+                "Наименование товара в корзине не соответствует наименованию выбранного товара");
     }
 
     @Test
@@ -56,20 +57,21 @@ public class MainTest {
 
     @Test
     public void addProductToFavorite(){
-        dnsMainPage.chooseHouseTechnic();
-        dnsCategoriesPage.chooseTvSubcategory();
-        dnsCategoriesPage.chooseTvSubcategory();
-        dnsCategoriesPage.chooseFirstProductOnCatalog();
+        mainPage.chooseHouseTechnic();
+        catalogPage.chooseTvSubcategory();
+        catalogPage.chooseTvSubcategory();
+        catalogPage.chooseFirstProduct();
 
-        String productNameInProductPage = dnsProductPage.getProductNameInProductPage();
+        String productNameInProductPage = productPage.getProductName();
 
-        dnsProductPage.clickAddToFavoriteButton();
-        dnsProductPage.closeModalWindow();
-        dnsProductPage.goToFavoriteFromProductPage();
+        productPage.clickAddToFavoriteButton();
+        productPage.closeModalWindow();
+        productPage.goToFavoriteFromProductPage();
 
-        String productNameInFavoritePage = dnsFavoritesPage.getProductNameInFavoriteProducts();
+        String productNameInFavoritePage = favoritesPage.getProductName();
 
-        Assert.assertEquals(productNameInProductPage, productNameInFavoritePage );
+        Assert.assertEquals(productNameInProductPage, productNameInFavoritePage,
+                "Наименование товара в избранных не соответствует наименованию выбранного товара");
     }
 
 
